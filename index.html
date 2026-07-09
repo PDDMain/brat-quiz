@@ -40,9 +40,15 @@
     text-shadow:0 6px 30px rgba(120,150,255,.15);
     margin:6px 0 2px;
   }
+  .hero{margin:12px 0 4px}
+  .hero img{
+    width:100%; max-width:320px; max-height:230px; object-fit:cover;
+    border-radius:18px; border:2px solid var(--gold);
+    box-shadow:0 14px 40px rgba(0,0,0,.5), 0 0 0 4px rgba(255,207,63,.12);
+  }
   .num20{
     position:relative; font-weight:900; line-height:1;
-    font-size:clamp(120px,42vw,240px);
+    font-size:clamp(90px,30vw,170px);
     background:linear-gradient(180deg,var(--gold),#ff7a00 70%,var(--red));
     -webkit-background-clip:text; background-clip:text; color:transparent;
     filter:drop-shadow(0 10px 40px rgba(255,140,0,.35));
@@ -130,7 +136,8 @@
   <!-- INTRO -->
   <section id="s-intro" class="screen intro on">
     <div class="hb">Поздравляем</div>
-    <div class="hbd">С Днём Рождения!</div>
+    <div class="hbd">С Днём Рождения,<br>Митя!</div>
+    <div class="hero"><img src="images/mitya.jpg" alt="Митя"></div>
     <div class="num20">20<span class="spark"></span></div>
     <div class="sub">Специальный футбольный квиз-поздравление. Готов пройти испытание, чемпион?</div>
     <button class="btn-red big" id="startBtn">Поехали! ⚽</button>
