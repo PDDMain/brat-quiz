@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>С Днём Рождения!</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#111832; --card:#161d38; --line:#26305a;
+    --ink:#eef2ff; --mut:#9aa6cf; --red:#e11d2a; --red2:#ff3b46;
+    --green:#22c55e; --gold:#ffcf3f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 50% -10%, #1b2650 0%, rgba(27,38,80,0) 60%),
+      radial-gradient(900px 600px at 100% 100%, #201338 0%, rgba(0,0,0,0) 55%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+    background-attachment:fixed;
+    min-height:100vh; min-height:100dvh;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:20px 16px 48px; min-height:100dvh; display:flex; flex-direction:column}
+  .screen{display:none; animation:fade .35s ease}
+  .screen.on{display:flex; flex-direction:column; flex:1}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ===== Intro ===== */
+  .intro{align-items:center; justify-content:center; text-align:center; gap:8px}
+  .hb{font-size:13px; letter-spacing:.35em; text-transform:uppercase; color:var(--mut); font-weight:700}
+  .hbd{
+    font-weight:900; line-height:.98; letter-spacing:-.01em;
+    font-size:clamp(38px,10vw,64px);
+    background:linear-gradient(180deg,#fff,#cdd7ff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 6px 30px rgba(120,150,255,.15);
+    margin:6px 0 2px;
+  }
+  .num20{
+    position:relative; font-weight:900; line-height:1;
+    font-size:clamp(120px,42vw,240px);
+    background:linear-gradient(180deg,var(--gold),#ff7a00 70%,var(--red));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 10px 40px rgba(255,140,0,.35));
+    margin:2px 0 8px;
+  }
+  .num20 .spark{position:absolute; inset:0; pointer-events:none}
+  .sub{color:var(--mut); font-size:16px; max-width:420px; margin:0 auto 26px}
+  .btn-red{
+    appearance:none; border:0; cursor:pointer;
+    background:linear-gradient(180deg,var(--red2),var(--red));
+    color:#fff; font-weight:800; font-size:20px; letter-spacing:.02em;
+    padding:18px 46px; border-radius:999px;
+    box-shadow:0 12px 30px rgba(225,29,42,.45), inset 0 1px 0 rgba(255,255,255,.25);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-red:hover{transform:translateY(-2px); box-shadow:0 18px 40px rgba(225,29,42,.55)}
+  .btn-red:active{transform:translateY(0) scale(.98)}
+  .btn-red.big{animation:pulse 2.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 12px 30px rgba(225,29,42,.45), inset 0 1px 0 rgba(255,255,255,.25)}50%{box-shadow:0 12px 44px rgba(225,29,42,.75), inset 0 1px 0 rgba(255,255,255,.25)}}
+
+  /* ===== Question ===== */
+  .top{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px}
+  .pill{font-size:13px; font-weight:700; color:var(--mut); background:var(--card); border:1px solid var(--line); padding:6px 12px; border-radius:999px}
+  .bar{height:6px; background:var(--card); border:1px solid var(--line); border-radius:999px; overflow:hidden; flex:1; margin:0 12px}
+  .bar > i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--red),var(--gold)); transition:width .4s ease}
+  .q-title{font-size:clamp(20px,5.5vw,26px); font-weight:800; text-align:center; margin:6px 0 14px}
+  .videoBox{
+    position:relative; width:100%; background:#000; border-radius:18px; overflow:hidden;
+    border:1px solid var(--line); box-shadow:0 18px 50px rgba(0,0,0,.5);
+    aspect-ratio:9/16; max-height:56dvh; margin:0 auto;
+  }
+  .videoBox.wide{aspect-ratio:16/9}
+  .videoBox video{width:100%; height:100%; object-fit:contain; background:#000; display:block}
+  .opts{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px}
+  .opt{
+    appearance:none; text-align:center; cursor:pointer;
+    background:#0c1122; color:var(--ink); border:1.5px solid #2a335e;
+    padding:16px 12px; border-radius:14px; font-size:16px; font-weight:700;
+    transition:transform .1s ease, border-color .15s ease, background .15s ease;
+  }
+  .opt:hover{transform:translateY(-2px); border-color:#3b4788}
+  .opt:disabled{cursor:default}
+  .opt.correct{background:linear-gradient(180deg,#12351f,#0e2a19); border-color:var(--green); color:#c9ffd9}
+  .opt.wrong{background:linear-gradient(180deg,#3a1116,#2a0c10); border-color:var(--red2); color:#ffd4d7}
+  .opt.dim{opacity:.5}
+
+  /* ===== Reveal ===== */
+  .reveal{margin-top:16px; text-align:center; display:none}
+  .reveal.on{display:block; animation:fade .3s ease}
+  .verdict{font-weight:900; font-size:22px; margin-bottom:10px}
+  .verdict.ok{color:var(--green)} .verdict.no{color:var(--red2)}
+  .ansCard{
+    background:var(--card); border:1px solid var(--line); border-radius:18px; padding:14px;
+    box-shadow:0 14px 40px rgba(0,0,0,.4);
+  }
+  .ansCard img{width:100%; max-height:46dvh; object-fit:contain; border-radius:12px; display:block; background:#0b0f1e}
+  .ansName{font-size:20px; font-weight:800; margin-top:10px}
+  .ansPh{
+    display:flex; align-items:center; justify-content:center; height:220px; border-radius:12px;
+    background:repeating-linear-gradient(45deg,#0e1428,#0e1428 12px,#111a34 12px,#111a34 24px);
+    color:var(--mut); font-weight:700; font-size:15px; text-align:center; padding:16px;
+  }
+  .next{margin-top:16px}
+  .btn-next{
+    appearance:none; border:0; cursor:pointer; width:100%;
+    background:linear-gradient(180deg,var(--red2),var(--red)); color:#fff;
+    font-weight:800; font-size:18px; padding:16px; border-radius:14px;
+    box-shadow:0 10px 26px rgba(225,29,42,.4);
+  }
+  .btn-next:active{transform:scale(.99)}
+
+  /* ===== Prize ===== */
+  .prize{align-items:center; text-align:center; justify-content:center; gap:6px}
+  .prize .hbd{margin-top:6px}
+  .scoreLine{font-size:20px; font-weight:800; color:var(--gold); margin:4px 0 18px}
+  .prizeVideo{width:100%; border-radius:18px; overflow:hidden; border:1px solid var(--line); background:#000; box-shadow:0 18px 50px rgba(0,0,0,.5); margin-bottom:18px}
+  .prizeVideo video{width:100%; display:block; max-height:64dvh; object-fit:contain; background:#000}
+  .again{background:none;border:1px solid var(--line); color:var(--mut); padding:10px 18px; border-radius:999px; cursor:pointer; font-weight:700}
+  .confetti{position:fixed; inset:0; pointer-events:none; z-index:50}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="s-intro" class="screen intro on">
+    <div class="hb">Поздравляем</div>
+    <div class="hbd">С Днём Рождения!</div>
+    <div class="num20">20<span class="spark"></span></div>
+    <div class="sub">Специальный футбольный квиз-поздравление. Готов пройти испытание, чемпион?</div>
+    <button class="btn-red big" id="startBtn">Поехали! ⚽</button>
+  </section>
+
+  <!-- QUESTION -->
+  <section id="s-quiz" class="screen">
+    <div class="top">
+      <span class="pill" id="qcount">Вопрос 1 / 9</span>
+      <span class="bar"><i id="qbar"></i></span>
+      <span class="pill" id="qscore">0 ✅</span>
+    </div>
+    <h2 class="q-title">Угадай, поздравление какого футболиста?</h2>
+    <div class="videoBox" id="qvideoBox">
+      <video id="qvideo" controls playsinline preload="metadata"></video>
+    </div>
+    <div class="opts" id="opts"></div>
+    <div class="reveal" id="reveal">
+      <div class="verdict" id="verdict"></div>
+      <div class="ansCard" id="ansCard"></div>
+      <div class="next"><button class="btn-next" id="nextBtn">Дальше →</button></div>
+    </div>
+  </section>
+
+  <!-- PRIZE -->
+  <section id="s-prize" class="screen prize">
+    <div class="hb">Финиш</div>
+    <div class="hbd">Ты прошёл тест!</div>
+    <div class="scoreLine" id="finalScore"></div>
+    <div class="sub" style="margin-bottom:14px">А вот и твой приз 🎁</div>
+    <div class="prizeVideo">
+      <video id="prizeVideo" controls playsinline preload="metadata" src="videos/Song.mp4"></video>
+    </div>
+    <button class="again" id="againBtn">Пройти заново</button>
+  </section>
+
+</div>
+<canvas class="confetti" id="confetti"></canvas>
+
+<script>
+/* ============================================================
+   QUESTIONS DATA
+   Fill each: video (in videos/), answer (correct footballer),
+   photo (in answers/, or "" to show name placeholder),
+   options (4 items incl. the correct answer; order shuffled at runtime).
+   ============================================================ */
+const QUESTIONS = [
+  { video:"videos/Denis.mp4",    answer:"Криштиану Роналду", photo:"answers/ronaldo.jpg",
+    options:["Криштиану Роналду","Лионель Месси","Неймар","Килиан Мбаппе"] },
+  { video:"videos/Ded.mp4",      answer:"Лионель Месси", photo:"answers/messi.jpg",
+    options:["Лионель Месси","Криштиану Роналду","Неймар","Антуан Гризманн"] },
+  { video:"videos/Mila.mp4",     answer:"Андрей Аршавин", photo:"answers/arshavin.jpg",
+    options:["Андрей Аршавин","Артём Дзюба","Криштиану Роналду","Лионель Месси"] },
+  { video:"videos/Elena.mp4",    answer:"Эрлинг Холанд", photo:"answers/haaland.jpg",
+    options:["Эрлинг Холанд","Килиан Мбаппе","Карим Бензема","Роберт Левандовски"] },
+  { video:"videos/Daniel.mp4",   answer:"Антуан Гризманн", photo:"answers/griezmann.jpg",
+    options:["Антуан Гризманн","Килиан Мбаппе","Усман Дембеле","Оливье Жиру"] },
+  { video:"videos/Maria.mp4",    answer:"Пауло Дибала", photo:"answers/dibala.jpg",
+    options:["Пауло Дибала","Лаутаро Мартинес","Мауро Икарди","Лионель Месси"] },
+  { video:"videos/MashaJr.mp4",  answer:"Гарет Бейл", photo:"answers/bale.jpg",
+    options:["Гарет Бейл","Лука Модрич","Эден Азар","Криштиану Роналду"] },
+  { video:"videos/Arda.mp4",     answer:"Винисиус Жуниор", photo:"answers/viniJr.jpg",
+    options:["Винисиус Жуниор","Родриго","Неймар","Килиан Мбаппе"] },
+  { video:"videos/IMG_9534.mp4", answer:"Килиан Мбаппе", photo:"answers/mbappe.jpg",
+    options:["Килиан Мбаппе","Эрлинг Холанд","Неймар","Усман Дембеле"] },
+];
+const PRIZE_VIDEO = "videos/Song.mp4";
+
+/* ================= engine ================= */
+let idx = 0, score = 0, answered = false, orderCache = [];
+
+const $ = id => document.getElementById(id);
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on')); $(id).classList.add('on'); window.scrollTo(0,0); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function startQuiz(){ idx=0; score=0; renderQ(); show('s-quiz'); }
+
+function renderQ(){
+  answered=false;
+  const q = QUESTIONS[idx];
+  $('qcount').textContent = `Вопрос ${idx+1} / ${QUESTIONS.length}`;
+  $('qscore').textContent = `${score} ✅`;
+  $('qbar').style.width = `${(idx/QUESTIONS.length)*100}%`;
+
+  const v = $('qvideo');
+  v.src = q.video; v.currentTime = 0; v.load();
+  const play = v.play(); if(play && play.catch) play.catch(()=>{});
+
+  // options (shuffle once per question, cache so re-render is stable)
+  orderCache = shuffle(q.options);
+  const opts = $('opts'); opts.innerHTML='';
+  orderCache.forEach(name=>{
+    const b=document.createElement('button');
+    b.className='opt'; b.textContent=name;
+    b.onclick=()=>choose(b,name);
+    opts.appendChild(b);
+  });
+
+  $('reveal').classList.remove('on');
+  $('ansCard').innerHTML='';
+}
+
+function choose(btn, name){
+  if(answered) return;
+  answered=true;
+  const q = QUESTIONS[idx];
+  const ok = name === q.answer;
+  if(ok) score++;
+  $('qscore').textContent = `${score} ✅`;
+
+  document.querySelectorAll('.opt').forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===q.answer) b.classList.add('correct');
+    else if(b===btn) b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+
+  try{ $('qvideo').pause(); }catch(e){}
+
+  $('verdict').textContent = ok ? 'Верно! ⚽' : 'Мимо ворот 😅';
+  $('verdict').className = 'verdict ' + (ok?'ok':'no');
+
+  const card = $('ansCard');
+  if(q.photo){
+    card.innerHTML = `<img src="${q.photo}" alt="${q.answer}" onerror="this.outerHTML='<div class=&quot;ansPh&quot;>Фото: ${q.answer}</div>'"><div class="ansName">${q.answer}</div>`;
+  }else{
+    card.innerHTML = `<div class="ansPh">Здесь будет фото: <b>&nbsp;${q.answer}</b></div><div class="ansName">${q.answer}</div>`;
+  }
+  $('reveal').classList.add('on');
+  $('reveal').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function next(){
+  idx++;
+  if(idx>=QUESTIONS.length){ finish(); }
+  else renderQ();
+}
+
+function finish(){
+  $('qbar').style.width='100%';
+  $('finalScore').textContent = `Правильных ответов: ${score} из ${QUESTIONS.length}`;
+  show('s-prize');
+  const pv=$('prizeVideo'); pv.src=PRIZE_VIDEO;
+  burst();
+}
+
+/* confetti */
+function burst(){
+  const c=$('confetti'), ctx=c.getContext('2d');
+  c.width=innerWidth; c.height=innerHeight;
+  const cols=['#e11d2a','#ffcf3f','#22c55e','#5b8cff','#ff7a00','#fff'];
+  const P=Array.from({length:140},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,r:4+Math.random()*6,vy:2+Math.random()*4,vx:-2+Math.random()*4,a:Math.random()*Math.PI,col:cols[Math.floor(Math.random()*cols.length)]}));
+  let t=0;
+  (function loop(){
+    t++; ctx.clearRect(0,0,c.width,c.height);
+    P.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.a+=.1;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.fillStyle=p.col;ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*.6);ctx.restore();});
+    if(t<220) requestAnimationFrame(loop); else ctx.clearRect(0,0,c.width,c.height);
+  })();
+}
+
+/* wire */
+$('startBtn').onclick=startQuiz;
+$('nextBtn').onclick=next;
+$('againBtn').onclick=()=>{ show('s-intro'); };
+</script>
+</body>
+</html>
